@@ -1,58 +1,177 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.border.Border;
+
 
 public class TicTacToe {
-    int boardWidth = 600;
-    int boardHeight = 650;
+    public int boardWidth = 660;
+    public int boardHeight = 460;
+    public int playerXScore = 0;
+    public int playerOScore = 0;
+    public int gameCount = 0;
 
-    JFrame frame = new JFrame("Tic-Tac-Toe");
+    public static Font font = new Font("Verdana", Font.BOLD, 20);
+	public static Font smallerFont = new Font("Verdana", Font.BOLD, 18);
+	public static Font largeFont = new Font("Verdana", Font.BOLD, 30);
+
+    public boolean won = false;
+	public boolean pcWon = false;
+	public boolean tie = false;
+
+    public static String title = "Tic-Tac-Toe";
+	public String wonString = "Congratulations, you won!";
+	public String pcWonString = "Sorry you lost, computer won!";
+	public String tieString = "Game ended in a tie";
+
+    JFrame frame = new JFrame(title);
     JLabel textLabel = new JLabel();
     JPanel textPanel = new JPanel();
-    JPanel boardPanel = new JPanel();
+    JPanel leftBoardPanel = new JPanel();
+    JPanel footerPanel = new JPanel();
+    JPanel rightPanel = new JPanel();
+    JPanel scoresPanel = new JPanel();
+    JPanel scorePanel = new JPanel();
+    JPanel scoresTitlePanel = new JPanel(); 
+    Border border = BorderFactory.createLineBorder(Color.GREEN, 3);
+
+    JLabel boardTitleLabel = new JLabel();
+    JLabel scoresLabel = new JLabel();
+    JLabel scoreLabel = new JLabel();
+    JLabel wonLabel = new JLabel();
+    JLabel loseLabel = new JLabel();
+    JLabel tieLabel = new JLabel();
+    JLabel gameEndLabel = new JLabel();
+    JLabel scoresTitle = new JLabel();
+    JLabel playerLabel = new JLabel();
+    JLabel footerLabel = new JLabel();
 
     JButton[][] board = new JButton[3][3];
-    String playerX = "X";
-    String playerO = "O";
-    String currentPlayer = playerX;
+    public String playerX = "X";
+    public String playerO = "O";
+    public String currentPlayer = playerX;
 
-    boolean gameOver = false;
+    public boolean gameOver = false;
     int turns = 0;
 
     TicTacToe() {
+        frame.setBackground(Color.DARK_GRAY);
         frame.setVisible(true);
         frame.setSize(boardWidth, boardHeight);
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
-
-        textLabel.setBackground(Color.darkGray);
-        textLabel.setForeground(Color.white);
-        textLabel.setFont(new Font("Arial", Font.BOLD, 50));
-        textLabel.setHorizontalAlignment(JLabel.CENTER);
-        textLabel.setText("Tic-Tac-Toe");
-        textLabel.setOpaque(true);
-
-        textPanel.setLayout(new BorderLayout());
-        textPanel.add(textLabel);
         frame.add(textPanel, BorderLayout.NORTH);
 
-        boardPanel.setLayout(new GridLayout(3, 3));
-        boardPanel.setBackground(Color.darkGray);
-        frame.add(boardPanel);
+        frame.getContentPane().setBackground(Color.decode("#00747c"));
+
+		textLabel.setBackground(Color.decode("#00747c"));
+		textLabel.setForeground(Color.WHITE);
+        textLabel.setFont(largeFont);
+        textLabel.setHorizontalAlignment(JLabel.CENTER);
+        textLabel.setText(title);
+        textLabel.setOpaque(true);
+        textLabel.setBounds(0, 0, 300, 80);
+
+        textPanel.setBackground(Color.decode("#00747c"));
+        // textPanel.setPreferredSize(new Dimension((boardWidth - 300), 80));
+        textPanel.setLayout(new BorderLayout());
+        // textPanel.setBounds(0, 0, (boardWidth - 300), 80);
+        textPanel.add(textLabel);
+
+        
+
+        leftBoardPanel.setBounds(0, 0, (boardWidth - 300), boardHeight);
+        leftBoardPanel.setPreferredSize(new Dimension(300, boardHeight));
+        leftBoardPanel.setLayout(new GridLayout(3, 3));
+        leftBoardPanel.setBackground(Color.decode("#014247"));
+        frame.add(leftBoardPanel);
+
+        frame.add(footerPanel, BorderLayout.SOUTH);
+
+		footerLabel.setBackground(Color.decode("#00747c"));
+		footerLabel.setForeground(Color.WHITE);
+        footerLabel.setFont(font);
+        footerLabel.setHorizontalAlignment(JLabel.CENTER);
+        footerLabel.setText("Made with love by Yonela Johannes");
+        footerLabel.setOpaque(true);
+        footerLabel.setBounds(0, 0, 300, 80);
+
+        footerPanel.setBackground(Color.decode("#00747c"));
+        // footerPanel.setPreferredSize(new Dimension((boardWidth - 300), 80));
+        footerPanel.setLayout(new BorderLayout());
+        // footerPanel.setBounds(0, 0, (boardWidth - 300), 80);
+        footerPanel.add(footerLabel);
+
+        rightPanel.setBorder(border);
+
+        rightPanel.setBackground(Color.decode("#2b2b2b"));
+        rightPanel.setPreferredSize(new Dimension(300, boardHeight));
+        // rightPanel.setLayout(new BorderLayout());
+        // rightPanel.setBounds(0, 0, 300, boardHeight);
+        frame.add(rightPanel, BorderLayout.EAST);
+
+        rightPanel.add(scoresPanel, BorderLayout.EAST);
+
+        scoresLabel.setText("Score board");
+        scoresLabel.setForeground(Color.white);
+        scoresLabel.setFont(font);
+        scoresLabel.setVerticalAlignment(JLabel.CENTER);
+        scoresLabel.setHorizontalAlignment(JLabel.CENTER);
+        scoresLabel.setBounds(0, 0, 300, 25);
+        scoresLabel.setBorder(border);
+
+        scoresPanel.setBackground(Color.decode("#00747c"));
+        // scoresPanel.setBounds(0, 0, 300, 60);
+        scoresPanel.add(scoresLabel);
+        
+
+        rightPanel.add(scorePanel, BorderLayout.CENTER);
+
+        scoreLabel.setText("Score");
+        scoreLabel.setForeground(Color.white);
+        scoreLabel.setFont(smallerFont);
+        scoreLabel.setBorder(border);
+        // scoreLabel.set
+        scoreLabel.setHorizontalAlignment(JLabel.CENTER);
+        scoreLabel.setVerticalAlignment(JLabel.CENTER);
+        scoreLabel.setBounds(0, 0, 300, 25);
+
+        scorePanel.setBackground(Color.decode("#00747c"));
+        scorePanel.setBounds(0, 0, 300, 60);
+        scorePanel.add(scoreLabel);
+
+        // rightPanel.add(scoresTitle, BorderLayout.CENTER);
+
+        // scoresTitle.setText("Player" + playerX + ": " + playerXScore);
+        // scoresTitle.setForeground(Color.white);
+        // scoresTitle.setFont(font);
+        // scoresTitle.setVerticalAlignment(JLabel.TOP);
+        // scoresTitle.setHorizontalAlignment(JLabel.CENTER);
+        // scoresTitle.setOpaque(true);
+
+        // rightPanel.add(scoresTitle, BorderLayout.CENTER);
+        
+        // scoresTitle.setText("Player" + playerO + ": " + playerOScore);
+        // scoresTitle.setForeground(Color.white);
+        // scoresTitle.setFont(font);
+        // scoresTitle.setVerticalAlignment(JLabel.TOP);
+        // scoresTitle.setHorizontalAlignment(JLabel.CENTER);
+        // scoresTitle.setOpaque(true);
+
+        // rightPanel.add(scoresTitle, BorderLayout.CENTER);
 
         for (int r = 0; r < 3; r++) {
             for (int c = 0; c < 3; c++) {
                 JButton tile = new JButton();
                 board[r][c] = tile;
-                boardPanel.add(tile);
+                leftBoardPanel.add(tile);
 
-                tile.setBackground(Color.darkGray);
+                tile.setBackground(Color.getColor("#3d3d3d"));
                 tile.setForeground(Color.white);
                 tile.setFont(new Font("Arial", Font.BOLD, 120));
                 tile.setFocusable(false);
-                // tile.setText(currentPlayer);
 
                 tile.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
