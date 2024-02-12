@@ -1,6 +1,6 @@
 # Tic Tac Toe Java
 
-### Created Java
+### Created with Java
 
 ![Project Image](tiktactoe.png)
 
