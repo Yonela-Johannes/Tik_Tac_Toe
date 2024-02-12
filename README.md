@@ -9,7 +9,7 @@
 To get started with this project, run
 
 ```~~bash~~
-  git clone https://github.com/Yonela-Johannes/intern_portfolio/
+  git clone https://github.com/Yonela-Johannes/Tik_Tac_Toe.git
 ```
 
 [MIT](https://choosealicense.com/licenses/mit/)
