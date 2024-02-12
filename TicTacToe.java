@@ -1,28 +1,34 @@
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.Border;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class TicTacToe {
     public int boardWidth = 660;
     public int boardHeight = 460;
     public int playerXScore = 0;
     public int playerOScore = 0;
-    public int gameCount = 0;
+    public int gameCount = 1;
     public int gameRounds = 0;
+
+    private int button1 = 10;
+    private int button2 = 10;
+    private int button3 = 10;
+    private int button4 = 10;
+    private int button5 = 10;
+    private int button6 = 10;
+    private int button7 = 10;
+    private int button8 = 10;
+    private int button9 = 10;
+    private int iterator = 0;
 
     public static Font font = new Font("Verdana", Font.BOLD, 20);
 	public static Font smallerFont = new Font("Verdana", Font.BOLD, 18);
+    public static Font scoreFont = new Font("Verdana", Font.PLAIN, 14);
 	public static Font largeFont = new Font("Verdana", Font.BOLD, 30);
 
-    public boolean won = false;
-	public boolean pcWon = false;
-	public boolean tie = false;
-
     public static String title = "Tic-Tac-Toe";
-	public String wonString = "Congratulations, you won!";
-	public String pcWonString = "Sorry you lost, computer won!";
-	public String tieString = "Game ended in a tie";
 
     JFrame frame = new JFrame(title);
     JLabel textLabel = new JLabel();
@@ -42,6 +48,7 @@ public class TicTacToe {
     JLabel scoresLabel = new JLabel();
     JLabel scoreLabel = new JLabel();
     JLabel wonLabel = new JLabel();
+    JLabel turnLabel = new JLabel();
     JLabel loseLabel = new JLabel();
     JLabel tieLabel = new JLabel();
     JLabel gameEndLabel = new JLabel();
@@ -54,6 +61,16 @@ public class TicTacToe {
     JButton btnReset = new JButton();
     JButton btnExit = new JButton();
     JButton[][] board = new JButton[3][3];
+    JButton btn1 = new JButton("");
+    JButton btn2 = new JButton("");
+    JButton btn3 = new JButton("");
+    JButton btn4 = new JButton("");
+    JButton btn5 = new JButton("");
+    JButton btn6 = new JButton("");
+    JButton btn7 = new JButton("");
+    JButton btn8 = new JButton("");
+    JButton btn9 = new JButton("");
+
     public String playerX = "X";
     public String playerO = "O";
     public String currentPlayer = playerX;
@@ -83,12 +100,8 @@ public class TicTacToe {
         textLabel.setBounds(0, 0, 300, 80);
 
         textPanel.setBackground(Color.decode("#00747c"));
-        // textPanel.setPreferredSize(new Dimension((boardWidth - 300), 80));
         textPanel.setLayout(new BorderLayout());
-        // textPanel.setBounds(0, 0, (boardWidth - 300), 80);
         textPanel.add(textLabel);
-
-        
 
         leftBoardPanel.setBounds(0, 0, (boardWidth - 300), boardHeight);
         leftBoardPanel.setPreferredSize(new Dimension(300, boardHeight));
@@ -102,17 +115,13 @@ public class TicTacToe {
 		footerLabel.setForeground(Color.WHITE);
         footerLabel.setFont(font);
         footerLabel.setHorizontalAlignment(JLabel.CENTER);
-        footerLabel.setText("Made with ❤ by Yonela Johannes");
+        footerLabel.setText("Made with love by Yonela Johannes");
         footerLabel.setOpaque(true);
         footerLabel.setBounds(0, 0, 300, 80);
 
         footerPanel.setBackground(Color.decode("#00747c"));
-        // footerPanel.setPreferredSize(new Dimension((boardWidth - 300), 80));
         footerPanel.setLayout(new BorderLayout());
-        // footerPanel.setBounds(0, 0, (boardWidth - 300), 80);
         footerPanel.add(footerLabel);
-
-        // rightPanel.setBorder(border);
 
         rightPanel.setBackground(Color.decode("#2b2b2b"));
         rightPanel.setPreferredSize(new Dimension(300, boardHeight));
@@ -131,38 +140,55 @@ public class TicTacToe {
         scoresLabel.setBounds(0, 0, 300, 25);
 
         rightPanel.add(playerXLabel);
-    
-        playerXLabel.setText("Player" + playerX + ": " + playerXScore);
+        rightPanel.add(playerOLabel);
+        rightPanel.add(scoreLabel);
+        rightPanel.add(turnLabel);
+
+        getScores();
+
         playerXLabel.setForeground(Color.white);
         playerXLabel.setFont(smallerFont);
         playerXLabel.setHorizontalAlignment(JLabel.CENTER);
         playerXLabel.setBounds(0, 60, 300, 25);
         
-        rightPanel.add(playerOLabel);
-        playerOLabel.setText("Player" + playerO + ": " + playerOScore);
+
         playerOLabel.setForeground(Color.white);
         playerOLabel.setFont(smallerFont);
         playerOLabel.setHorizontalAlignment(JLabel.CENTER);
-        playerOLabel.setBounds(0, 80, 300, 25);
+        playerOLabel.setBounds(0, 100, 300, 25);
         
+        scoreLabel.setForeground(Color.white);
+        scoreLabel.setFont(scoreFont);
+        scoreLabel.setHorizontalAlignment(JLabel.CENTER);
+        scoreLabel.setBounds(0, 180, 300, 25);
+
+        turnLabel.setForeground(Color.white);
+        turnLabel.setFont(scoreFont);
+        turnLabel.setHorizontalAlignment(JLabel.CENTER);
+        turnLabel.setBounds(0, 200, 300, 25);
+
         btnReset.setBackground(Color.decode("#00747c"));
         btnReset.setForeground(Color.WHITE);
         btnReset.setText("Reset");
-        btnReset.setBounds(0, 0, 80, 25);
+        btnReset.setBounds(50, boardHeight - 150, 80, 25);
         btnReset.setHorizontalAlignment(JButton.CENTER);
         btnReset.setVerticalAlignment(JButton.CENTER);
         btnReset.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
-        rightPanel.add(btnReset);
+        rightPanel.add(btnReset, BorderLayout.SOUTH);
+        rightPanel.add(btnExit, BorderLayout.CENTER);
 
         btnReset.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
                 if(e.getSource() == btnReset){
-                    frame = new JFrame("EXIT");
+                    frame = new JFrame("RESET");
                     if(JOptionPane.showConfirmDialog(frame, "Are You Sure You Want To Reset Game", "Tik-Tac-Toe",  JOptionPane.YES_NO_OPTION) == JOptionPane.YES_NO_OPTION){
-                        board = new JButton[3][3];
-                        System.out.println("We are reseting!!");
-                        System.out.println(board);
+                        clearBoard();
+                        playerXScore = 0;
+                        playerOScore = 0;
+                        gameCount = 1;
+                        gameRounds = 0;
+                        getScores();
                     }
                 }
             }
@@ -171,14 +197,12 @@ public class TicTacToe {
         btnExit.setBackground(Color.decode("#00747c"));
         btnExit.setForeground(Color.WHITE);
         btnExit.setText("Exit");
-        btnExit.setBounds(0, 0, 90, 25);
+        btnExit.setBounds(170, boardHeight - 150, 90, 25);
         btnExit.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
-        // rightPanel.add(btnExit, BorderLayout.CENTER);
         btnExit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
                 if(e.getSource() == btnExit){
-                    System.out.println("We are exiting!!");
                     frame = new JFrame("EXIT");
                     if(JOptionPane.showConfirmDialog(frame, "Cofirm You Want To Exit", "Tik-Tac-Toe",  JOptionPane.YES_NO_OPTION) == JOptionPane.YES_NO_OPTION){
                         System.exit(0);
@@ -187,139 +211,298 @@ public class TicTacToe {
             }
         });
 
-        for (int r = 0; r < 3; r++) {
-            for (int c = 0; c < 3; c++) {
-                JButton tile = new JButton();
-                board[r][c] = tile;
-                leftBoardPanel.add(tile);
-
-                tile.setBackground(Color.getColor("#3d3d3d"));
-                tile.setForeground(Color.decode("#2b2b2b"));
-                tile.setFont(new Font("Arial", Font.BOLD, 120));
-                tile.setFocusable(false);
-
-                tile.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        if (roundOver) return;
-                        JButton tile = (JButton) e.getSource();
-                        if (tile.getText() == "") {
-                            tile.setText(currentPlayer);
-                            turns++;
-                            System.out.println("We are outside brodiee!!!");
-                            System.out.println("We are inside bro!");
-                            if(gameCount == gameRounds){
-                                gameOver = true;
-                            }
-                            // Clear board
-                            // clearBoard();
-                            checkWinner();
-                            System.out.println("ROUND OVER: "+ roundOver);
-                            if (!roundOver) {
-                                currentPlayer = currentPlayer == playerX ? playerO : playerX;
-                                textLabel.setText(currentPlayer + "'s turn.");
-                            }
-                        }
-
-                    }
-                });
-            }
-        }
+        tileButton(btn1, 0, 0, "btn1");
+        tileButton(btn2, 0, 1, "btn2");
+        tileButton(btn3, 0, 2, "btn3");
+        tileButton(btn4, 1, 0, "btn4");
+        tileButton(btn5, 1, 1, "btn5");
+        tileButton(btn6, 1, 2, "btn6");
+        tileButton(btn7, 2, 0, "btn7");
+        tileButton(btn8, 2, 1, "btn8");
+        tileButton(btn9, 2, 2, "btn9");
     }
     
-    void checkWinner() {
-        //horizontal
-        for (int r = 0; r < 3; r++) {
-            if (board[r][0].getText() == "") continue;
-
-            if (board[r][0].getText() == board[r][1].getText() &&
-                board[r][1].getText() == board[r][2].getText()) {
-                for (int i = 0; i < 3; i++) {
-
-                    setWinner(board[r][i]);
-                }
-                roundOver = true;
-                return;
-            }
-        }
-
-        //vertical
-        for (int c = 0; c < 3; c++) {
-            if (board[0][c].getText() == "") continue;
-            
-            if (board[0][c].getText() == board[1][c].getText() &&
-                board[1][c].getText() == board[2][c].getText()) {
-                for (int i = 0; i < 3; i++) {
-                    setWinner(board[i][c]);
-                }
-                roundOver = true;
-                return;
-            }
-        }
-
-        //diagonally
-        if (board[0][0].getText() == board[1][1].getText() &&
-            board[1][1].getText() == board[2][2].getText() &&
-            board[0][0].getText() != "") {
-            for (int i = 0; i < 3; i++) {
-                setWinner(board[i][i]);
-            }
-            roundOver = true;
-            return;
-        }
-
-        //anti-diagonally
-        if (board[0][2].getText() == board[1][1].getText() &&
-            board[1][1].getText() == board[2][0].getText() &&
-            board[0][2].getText() != "") {
-            setWinner(board[0][2]);
-            setWinner(board[1][1]);
-            setWinner(board[2][0]);
-            roundOver = true;
-            return;
-        }
-
-        if (turns == 9) {
-            for (int r = 0; r < 3; r++) {
-                for (int c = 0; c < 3; c++) {
-                    setTie(board[r][c]);
-                }
-            }
-            roundOver = true;
-        }
-    }
-
-    void setWinner(JButton tile) {
-        tile.setForeground(Color.green);
-        tile.setBackground(Color.gray);
-        if(roundOver){
-            gameCount += 1;
-        }
-        if(currentPlayer == playerX){
-            playerXScore += 1;
-        } else if(currentPlayer == playerO){
-            playerOScore += 1;
-        }
-        System.out.println("PlayerX score: "+ playerXScore);
-        System.out.println("Player O score: "+ playerOScore);
-        System.out.println("GAME COUNT: "+ gameCount);
-        textLabel.setText(currentPlayer + " is the winner!");
-    }
 
     void setTie(JButton tile) {
         tile.setForeground(Color.orange);
         tile.setBackground(Color.gray);
-        System.out.println("PlayerX score: "+ playerXScore);
-        System.out.println("Player O score: "+ playerOScore);
-        System.out.println("GAME COUNT: "+ gameCount);
+        gameCount++;
+        getScores();
         textLabel.setText("It's a tie!");
     }
 
     public void clearBoard() {
-        for(int i = 0; i < 3; i++){
-            for(int j = 0; j < i; i++){
-                System.out.println(board[j][i]);
-            }
+        btn1.setText(null);
+        btn2.setText(null);
+        btn3.setText(null);
+        btn4.setText(null);
+        btn5.setText(null);
+        btn6.setText(null);
+        btn7.setText(null);
+        btn8.setText(null);
+        btn9.setText(null);
+        button1=10;
+        button2=10;
+        button3=10;
+        button4=10;
+        button5=10;
+        button6=10;
+        button7=10;
+        button8=10;
+        button9=10;
+        iterator=0;
+    }
+    public void getScores(){
+        playerXLabel.setText("Player" + playerX + ": " + playerXScore);
+        playerOLabel.setText("Player" + playerO + ": " + playerOScore);
+        scoreLabel.setText("GAME: "+ gameCount + "-" + 5);
+    }
+
+    private void winningGame(){
+        // Player X
+        if(button1 == 1 && button2 == 1 && button3 == 1){
+            gameCount++;          
+            getScores();
+            roundOver = true;
+            clearBoard();
+            xMessage();
+        }else if(button4 == 1 && button5 == 1 && button6 == 1){
+            gameCount++;          
+            getScores();
+            roundOver = true;
+            clearBoard();
+            xMessage();
+        }else if(button7 == 1 && button8 == 1 && button9 == 1){
+            gameCount++;          
+            getScores();
+            roundOver = true;
+            clearBoard();
+            xMessage();
+        }else if(button1 == 1 && button4 == 1 && button7 == 1){
+            gameCount++;         
+            getScores();
+            roundOver = true;
+            clearBoard();
+            xMessage();
+        }else if(button2 == 1 && button5 == 1 && button8 == 1){
+            gameCount++;         
+            getScores();
+            roundOver = true;
+            clearBoard();
+            xMessage();
+        }else if(button3 == 1 && button6 == 1 && button9 == 1){
+            gameCount++;         
+            getScores();
+            roundOver = true;
+            clearBoard();
+            xMessage();
+        }else if(button1 == 1 && button5 == 1 && button9 == 1){
+            gameCount++;         
+            getScores();
+            roundOver = true;
+            clearBoard();
+            xMessage();
+        }else if(button3 == 1 && button5 == 1 && button7 == 1){
+            gameCount++;         
+            getScores();
+            roundOver = true;
+            clearBoard();
+            xMessage();
+        }else if(button1 == 0 && button2 == 0 && button3 == 0){ //Player O
+            getScores();
+            roundOver = true;
+            clearBoard();
+            gameCount++;
+            oMessage();
+        }else if(button4 == 0 && button5 == 0 && button6 == 0){
+            getScores();
+            roundOver = true;
+            clearBoard();
+            gameCount++;
+            oMessage();
+        }else if(button7 == 0 && button8 == 0 && button9 == 0){
+            getScores();
+            roundOver = true;
+            clearBoard();
+            gameCount++;
+            oMessage();
+        }else if(button1 == 0 && button4 == 0 && button7 == 0){
+            getScores();
+            roundOver = true;
+            clearBoard();
+            gameCount++;
+            oMessage();
+        }else if(button2 == 0 && button5 == 0 && button8 == 0){
+            getScores();
+            roundOver = true;
+            clearBoard();
+            gameCount++;
+            oMessage();
+        }else if(button3 == 0 && button6 == 0 && button9 == 0){
+            getScores();
+            roundOver = true;
+            clearBoard();
+            gameCount++;
+            oMessage();
+        }else if(button1 == 0 && button5 == 0 && button9 == 0){
+            getScores();
+            roundOver = true;
+            clearBoard();
+            gameCount++;
+            oMessage();
+        }else if(button3 == 0 && button5 == 0 && button7 == 0){
+            getScores();
+            roundOver = true;
+            clearBoard();
+            gameCount++;
+            oMessage();
+        }else if(iterator == 9){
+            getScores();
+            roundOver = true;
+            clearBoard();
+            gameCount++;
+            tMessage();
         }
     }
 
+    // Player X Popup
+    public void xMessage(){
+        JOptionPane.showMessageDialog(frame, "Player X Wins", "Tik-Tac-Toe", JOptionPane.INFORMATION_MESSAGE);
+        playerXScore++;
+        getScores();
+    }
+    // Player O Popup
+    public void oMessage(){
+        JOptionPane.showMessageDialog(frame, "Player O Wins", "Tik-Tac-Toe", JOptionPane.INFORMATION_MESSAGE);
+        playerOScore++;
+        getScores();
+    }
+    // Tie Popup
+    public void tMessage(){
+        JOptionPane.showMessageDialog(frame, "It's A Tie!", "Tik-Tac-Toe", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+        // Tie Popup
+    public void gameOverMessage(){
+        JOptionPane.showMessageDialog(frame, "Game over!", "Tik-Tac-Toe", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void tileButton(JButton buttonParam, int btnPlacement, int btnIndex, String type) {
+        board[btnPlacement][btnIndex] = buttonParam;
+        leftBoardPanel.add(buttonParam); 
+        
+        buttonParam.setBackground(Color.getColor("#3d3d3d"));
+        buttonParam.setForeground(Color.decode("#2b2b2b"));
+        buttonParam.setFont(new Font("Arial", Font.BOLD, 120));
+        buttonParam.setMargin(new Insets(0, 0, 0, 0));
+        buttonParam.setFocusable(false);
+
+        buttonParam.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if(gameCount == 6){
+                    gameOverMessage();
+                    roundOver = true;
+                    return;
+                }
+                if (roundOver) {
+                    clearBoard();
+                    roundOver = false;
+                }
+                buttonParam.setText(currentPlayer);
+
+                if(currentPlayer.equalsIgnoreCase("X"))
+                {
+                    buttonParam.setForeground(Color.RED);
+                    checkXButtonTile(type);
+                    iterator++;
+                }
+                else if(currentPlayer.equalsIgnoreCase("O"))
+                {
+                    buttonParam.setForeground(Color.BLUE);
+                    checkOButtonTile(type);
+                    iterator++;
+                }
+
+                winningGame();
+
+                if (!roundOver) {
+                    if(currentPlayer == playerX) {
+                        currentPlayer = playerO;
+                    } else if(currentPlayer == playerO){
+                        currentPlayer = playerX;
+                    };
+
+                    turnLabel.setText(currentPlayer + "'s turn.");
+                }
+            }
+
+            public void checkXButtonTile(String buttonParam){
+                switch(buttonParam){
+                    case "btn1":
+                        button1 = 1;
+                        break;
+                    case "btn2":
+                        button2 = 1;
+                        break;
+                    case "btn3":
+                        button3 = 1;
+                        break;
+                    case "btn4":
+                        button4 = 1;
+                        break;
+                    case "btn5":
+                        button5 = 1;
+                        break;
+                    case "btn6":
+                        button6 = 1;
+                        break;
+                    case "btn7":
+                        button7 = 1;
+                        break;
+                    case "btn8":
+                        button8 = 1;
+                        break;
+                    case "btn9":
+                        button9 = 1;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            public void checkOButtonTile(String buttonParam){
+                switch(buttonParam){
+                    case "btn1":
+                        button1 = 0;
+                        break;
+                    case "btn2":
+                        button2 = 0;
+                        break;
+                    case "btn3":
+                        button3 = 0;
+                        break;
+                    case "btn4":
+                        button4 = 0;
+                        break;
+                    case "btn5":
+                        button5 = 0;
+                        break;
+                    case "btn6":
+                        button6 = 0;
+                        break;
+                    case "btn7":
+                        button7 = 0;
+                        break;
+                    case "btn8":
+                        button8 = 0;
+                        break;
+                    case "btn9":
+                        button9 = 0;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+    }
 }
