@@ -387,6 +387,10 @@ public class TicTacToe {
         JOptionPane.showMessageDialog(frame, "Game over!", "Tik-Tac-Toe", JOptionPane.INFORMATION_MESSAGE);
     }
 
+    // Error Play Popup
+    public void existMessage(){
+        JOptionPane.showMessageDialog(frame, "Invalid move!", "Tik-Tac-Toe", JOptionPane.INFORMATION_MESSAGE);
+    }
     private void tileButton(JButton buttonParam, int btnPlacement, int btnIndex, String type) {
         board[btnPlacement][btnIndex] = buttonParam;
         leftBoardPanel.add(buttonParam); 
@@ -408,7 +412,15 @@ public class TicTacToe {
                     clearBoard();
                     roundOver = false;
                 }
-                buttonParam.setText(currentPlayer);
+                String exist = buttonParam.getText();
+                System.out.print("EXIST: "+ exist);
+                if(exist != "")
+                {
+                    existMessage();
+                    return;
+                } else {
+                    buttonParam.setText(currentPlayer);
+                }
 
                 if(currentPlayer.equalsIgnoreCase("X"))
                 {
