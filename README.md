@@ -1,4 +1,4 @@
-# Tik Tak Toe Java
+# Tic Tac Toe Java
 
 ### Created Java
 
